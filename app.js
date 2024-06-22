@@ -226,7 +226,9 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
         `;
 
         // Generate the PDF using Puppeteer
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
         const page = await browser.newPage();
         await page.setContent(htmlContent);
         const pdfBuffer = await page.pdf();
