@@ -257,7 +257,7 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
         // Set up email options
         const mailOptions = {
             from: 'youknowthatiamright8@gmail.com',
-            to: ['rintaronakai@gmail.com', 'tamami196831@gmail.com'],
+            to: ['rintaronakai@gmail.com', 'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'],
             subject: `日報　${name}です`,
             text: 'PDFファイルを添付します。',
             attachments: [{ filename: `${date}.pdf`, path: pdfPath }]
