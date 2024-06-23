@@ -77,7 +77,7 @@ app.get("/", (req, res) => {
               </div>
               <div class="mb-3">
                 <label for="notice" class="form-label">気づいたこと</label>
-                <textarea class="form-control" id="notice" name="notice" rows="4" required>${formData ? formData.notice : ''}</textarea>
+                <textarea class="form-control" id="notice" name="notice" rows="4">${formData ? formData.notice : ''}</textarea>
               </div>
               <div class="mb-3">
                 <label for="photos" class="form-label">写真を追加</label>
@@ -108,8 +108,13 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
 
     // Generate HTML content for the review page
     const htmlContent = `
-        <html>
+
+
+    <!DOCTYPE html>
+        <html lang="ja">
         <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>日報確認</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
             <style>
