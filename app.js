@@ -72,6 +72,10 @@ app.get("/", (req, res) => {
                 <input type="time" class="form-control" id="end_time" name="end" value="${formData ? formData.end : ''}" required>
               </div>
               <div class="mb-3">
+                <label for="nextDate" class="form-label">次回出勤日</label>
+                <input type="date" class="form-control" id="nextDate" name="nextDate" value="${formData ? formData.nextDate : ''}" required>
+              </div>
+              <div class="mb-3">
                 <label for="content" class="form-label">業務内容</label>
                 <textarea class="form-control" id="content" name="content" rows="4" required>${formData ? formData.content : ''}</textarea>
               </div>
@@ -100,7 +104,7 @@ const imageToBase64 = (filePath) => {
 
 
 app.post('/review', upload.array('photos', 5), (req, res) => {
-    const { name, date, content, notice, start, end } = req.body;
+    const { name, date, content, notice, start, end, nextDate } = req.body;
     const photoPaths = req.files.map(file => `/uploads/${file.filename}`);
 
     req.session.formData = { name, date, content, notice, start, end, photoPaths };
@@ -145,6 +149,10 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                     <p>${start} - ${end}</p>
                 </div>
                 <div class="content">
+                    <p class="query">次回出勤日:</p>
+                    <p>${nextDate}</p>
+                </div>
+                <div class="content">
                     <p class="query">業務内容:</p>
                     <p>${content}</p>
                 </div>
@@ -177,7 +185,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
 
 app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
 
-    const { name, date, content, notice, start, end, photoPaths } = req.body;
+    const { name, date, content, notice, start, end, photoPaths, nextDate } = req.body;
     const photoPathsArray = (Array.isArray(photoPaths) ? photoPaths : [photoPaths]).filter(Boolean).map(p => path.join(__dirname, p));
 
 
@@ -217,6 +225,9 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
                 <p class="query">業務時間:</p>
                 <p>${start} - ${end}</p>
                 <br>
+                <p class="query">次回出勤日:</p>
+                <p>${nextDate}</p>
+                <br>
                 <p class="query">業務内容:</p>
                 <p>${content}</p>
                 <br>
@@ -246,10 +257,10 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
         // Set up email options
         const mailOptions = {
             from: 'youknowthatiamright8@gmail.com',
-            to: 'rintaronakai@gmail.com',
+            to: ['rintaronakai@gmail.com', 'tamami196831@gmail.com'],
             subject: `日報　${name}です`,
             text: 'PDFファイルを添付します。',
-            attachments: [{ filename: '日報.pdf', path: pdfPath }]
+            attachments: [{ filename: `${date}.pdf`, path: pdfPath }]
         };
 
         // Send the email
