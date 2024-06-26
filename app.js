@@ -27,7 +27,9 @@ const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 
 require('dotenv').config();
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'mail1030.onamae.ne.jp',
+    PORT: 465,
+    secure: 'true',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -256,12 +258,15 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
 
         // Set up email options
         const mailOptions = {
-            from: 'youknowthatiamright8@gmail.com',
-            to: ['rintaronakai@gmail.com', 'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'],
+            from: 'main@lavienne.tech',
+            to: 'rintaronakai@gmail.com',
             subject: `日報　${name}です`,
             text: 'PDFファイルを添付します。',
             attachments: [{ filename: `${date}.pdf`, path: pdfPath }]
         };
+
+//  'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'
+
 
         // Send the email
         transporter.sendMail(mailOptions, async (error, info) => {
