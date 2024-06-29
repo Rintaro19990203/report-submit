@@ -74,6 +74,19 @@ app.get("/", (req, res) => {
                 <input type="time" class="form-control" id="end_time" name="end" value="${formData ? formData.end : ''}" required>
               </div>
               <div class="mb-3">
+                <label for="work_hours" class="form-label">勤務時間</label>
+                <div>
+                    <select id="work_hours" name="hours" class="form-select" required>
+                        <option value="">-- 時間 --</option>
+                        ${Array.from({ length: 11 }, (_, i) => `<option value="${i}" ${formData && formData.hours == i ? 'selected' : ''}>${i} 時間</option>`).join('')}
+                    </select>
+                    <select id="work_minutes" name="minutes" class="form-select" required>
+                        <option value="">-- 分 --</option>
+                        ${Array.from({ length: 4 }, (_, i) => `<option value="${i * 15}" ${formData && formData.minutes == i * 15 ? 'selected' : ''}>${i * 15} 分</option>`).join('')}
+                    </select>
+                </div>
+              </div>
+              <div class="mb-3">
                 <label for="nextDate" class="form-label">次回出勤日</label>
                 <input type="date" class="form-control" id="nextDate" name="nextDate" value="${formData ? formData.nextDate : ''}" required>
               </div>
@@ -106,10 +119,10 @@ const imageToBase64 = (filePath) => {
 
 
 app.post('/review', upload.array('photos', 5), (req, res) => {
-    const { name, date, content, notice, start, end, nextDate } = req.body;
+    const { name, date, content, notice, start, end, nextDate, hours, minutes} = req.body;
     const photoPaths = req.files.map(file => `/uploads/${file.filename}`);
 
-    req.session.formData = { name, date, content, notice, start, end, photoPaths };
+    req.session.formData = { name, date, content, notice, start, end, photoPaths, nextDate, hours, minutes};
 
 
     // Generate HTML content for the review page
@@ -148,7 +161,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                 </div>
                 <div class="content">
                     <p class="query">業務時間:</p>
-                    <p>${start} - ${end}</p>
+                    <p>${start} - ${end} 　(${hours}時間${minutes}分)</p>
                 </div>
                 <div class="content">
                     <p class="query">次回出勤日:</p>
@@ -187,7 +200,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
 
 app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
 
-    const { name, date, content, notice, start, end, photoPaths, nextDate } = req.body;
+    const { name, date, content, notice, start, end, photoPaths, nextDate, hours, minutes} = req.body;
     const photoPathsArray = (Array.isArray(photoPaths) ? photoPaths : [photoPaths]).filter(Boolean).map(p => path.join(__dirname, p));
 
 
@@ -225,7 +238,7 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
                 <p>${name}</p>
                 <br>
                 <p class="query">業務時間:</p>
-                <p>${start} - ${end}</p>
+                <p>${start} - ${end} 　(${hours}時間${minutes}分)</p>
                 <br>
                 <p class="query">次回出勤日:</p>
                 <p>${nextDate}</p>
@@ -259,13 +272,13 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
         // Set up email options
         const mailOptions = {
             from: 'main@lavienne.tech',
-            to: ['rintaronakai@gmail.com', 'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'],
+            to: 'rintaronakai@gmail.com',
             subject: `日報　${name}です`,
             text: 'PDFファイルを添付します。',
             attachments: [{ filename: `${date}.pdf`, path: pdfPath }]
         };
 
-//  
+//   'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'
 
 
         // Send the email
