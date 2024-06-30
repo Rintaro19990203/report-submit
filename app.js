@@ -78,7 +78,7 @@ app.get("/", (req, res) => {
                 <div>
                     <select id="work_hours" name="hours" class="form-select" required>
                         <option value="">-- 時間 --</option>
-                        ${Array.from({ length: 11 }, (_, i) => `<option value="${i}" ${formData && formData.hours == i ? 'selected' : ''}>${i} 時間</option>`).join('')}
+                        ${Array.from({ length: 6 }, (_, i) => `<option value="${i}" ${formData && formData.hours == i ? 'selected' : ''}>${i} 時間</option>`).join('')}
                     </select>
                     <select id="work_minutes" name="minutes" class="form-select" required>
                         <option value="">-- 分 --</option>
@@ -146,10 +146,19 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                 .content { margin: 20px 0; }
                 .btn { display: inline-block; margin: 10px; }
                 .button-container { display: flex; justify-content: center; align-items: center;}
+                #loading {display: none;}
             </style>
+
+            <script>
+                function showLoading() {
+                    document.getElementById('loading').style.display = 'block';
+                    document.getElementById('container').style.display = 'none';
+                }
+            </script>
+
         </head> 
         <body>
-            <div class="container">
+            <div class="container" id="container">
                 <h1>日報確認</h1>
                 <div class="content">
                     <p class="query">日付:</p>
@@ -180,7 +189,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                     ${photoPaths.map(photoPath => `<img src="${photoPath}" alt="photo"><br>`).join('')}
                 </div>
                 <div class="button-container">
-                    <form action="/generate-pdf" method="post" style="display: inline;">
+                    <form action="/generate-pdf" method="post" style="display: inline;" onsubmit="showLoading()">
                         ${Object.entries(req.body).map(([key, value]) => `<input type="hidden" name="${key}" value="${value}">`).join('')}
                         ${photoPaths.map(photoPath => `<input type="hidden" name="photoPaths" value="${photoPath}">`).join('')}
                         <button type="submit" class="btn btn-primary">送信</button>
@@ -190,6 +199,11 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                     </form>
                 </div>
             </div>
+
+            <div id="loading">
+                <h1>送信中です... 少々お待ちください</h1>
+            </div>                      
+
         </body>
         </html>
     `;
@@ -278,7 +292,7 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
             attachments: [{ filename: `${date}.pdf`, path: pdfPath }]
         };
 
-//   
+    
 
 
         // Send the email
