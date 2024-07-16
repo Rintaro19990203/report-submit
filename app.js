@@ -139,7 +139,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
             <style>
                 body {margin: 5% auto;}
                 h1 { text-align: center; margin-top: 7%; margin-bottom: 7%; }
-                p, pre {font-size: 20px;}
+                p {font-size: 20px;}
                 .query { font-weight: bold;}
                 img { display: block; margin: 0 auto; max-width: 100%; height: auto; }
                 .container { width: 80%; margin: auto; }
@@ -178,11 +178,11 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                 </div>
                 <div class="content">
                     <p class="query">業務内容:</p>
-                    <pre>${content}</pre>
+                    <p>${content}</p>
                 </div>
                 <div class="content">
                     <p class="query">気づいたこと:</p>
-                    <pre>${notice}</pre>
+                    <p>${notice}</p>
                 </div>
                 <div class="content">
                     <p class="query">添付写真:</p>
