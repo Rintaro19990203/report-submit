@@ -139,7 +139,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
             <style>
                 body {margin: 5% auto;}
                 h1 { text-align: center; margin-top: 7%; margin-bottom: 7%; }
-                p {font-size: 20px;}
+                p {font-size: 20px; word-wrap: break-word; white-space: pre-wrap;}
                 .query { font-weight: bold;}
                 img { display: block; margin: 0 auto; max-width: 100%; height: auto; }
                 .container { width: 80%; margin: auto; }
@@ -285,11 +285,13 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
         // Set up email options
         const mailOptions = {
             from: 'main@lavienne.tech',
-            to: ['rintaronakai@gmail.com', 'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'],
+            to: ['rintaronakai@gmail.com'],
             subject: `日報　${name}です`,
             text: 'PDFファイルを添付します。',
             attachments: [{ filename: `${date}.pdf`, path: pdfPath }]
         };
+
+        //  'tamami196831@gmail.com', 'etpy0623.mu@gmail.com'
 
     
 
