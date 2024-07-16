@@ -92,11 +92,11 @@ app.get("/", (req, res) => {
               </div>
               <div class="mb-3">
                 <label for="content" class="form-label">業務内容</label>
-                <textarea class="form-control" id="content" name="content" rows="4" required>${formData ? formData.content : ''}</textarea>
+                <textarea class="form-control" id="content" name="content" rows="8" required>${formData ? formData.content : ''}</textarea>
               </div>
               <div class="mb-3">
                 <label for="notice" class="form-label">気づいたこと</label>
-                <textarea class="form-control" id="notice" name="notice" rows="4">${formData ? formData.notice : ''}</textarea>
+                <textarea class="form-control" id="notice" name="notice" rows="8">${formData ? formData.notice : ''}</textarea>
               </div>
               <div class="mb-3">
                 <label for="photos" class="form-label">写真を追加</label>
