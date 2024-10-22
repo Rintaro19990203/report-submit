@@ -61,6 +61,16 @@ app.get("/", (req, res) => {
                   <option value="上野良一" ${formData && formData.name === '上野良一' ? 'selected' : ''}>上野良一</option>
                 </select>
               </div>
+
+              <div class="mb-3">
+                <label for="place" class="form-label">勤務場所</label>
+                <select class="form-control" id="place" name="place" required>
+                  <option value="">勤務場所を選択してください</option>
+                  <option value="レポー" ${formData && formData.place === 'レポー' ? 'selected' : ''}>レポー</option>
+                  <option value="エスポワール" ${formData && formData.place === 'エスポワール' ? 'selected' : ''}>エスポワール</option>
+                </select>
+              </div>
+
               <div class="mb-3">
                 <label for="date" class="form-label">日付</label>
                 <input type="date" class="form-control" id="date" name="date" value="${formData ? formData.date : ''}" required>
@@ -119,10 +129,10 @@ const imageToBase64 = (filePath) => {
 
 
 app.post('/review', upload.array('photos', 5), (req, res) => {
-    const { name, date, content, notice, start, end, nextDate, hours, minutes} = req.body;
+    const { name, place, date, content, notice, start, end, nextDate, hours, minutes} = req.body;
     const photoPaths = req.files.map(file => `/uploads/${file.filename}`);
 
-    req.session.formData = { name, date, content, notice, start, end, photoPaths, nextDate, hours, minutes};
+    req.session.formData = { name, place, date, content, notice, start, end, photoPaths, nextDate, hours, minutes};
 
 
     // Generate HTML content for the review page
@@ -167,6 +177,10 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
                 <div class="content">
                     <p class="query">名前:</p>
                     <p>${name}</p>
+                </div>
+                <div class="content">
+                    <p class="query">勤務場所:</p>
+                    <p>${place}</p>
                 </div>
                 <div class="content">
                     <p class="query">業務時間:</p>
@@ -214,7 +228,7 @@ app.post('/review', upload.array('photos', 5), (req, res) => {
 
 app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
 
-    const { name, date, content, notice, start, end, photoPaths, nextDate, hours, minutes} = req.body;
+    const { name, place, date, content, notice, start, end, photoPaths, nextDate, hours, minutes} = req.body;
     const photoPathsArray = (Array.isArray(photoPaths) ? photoPaths : [photoPaths]).filter(Boolean).map(p => path.join(__dirname, p));
 
 
@@ -249,6 +263,9 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
                 <br>
                 <p class="query">名前:</p>
                 <p>${name}</p>
+                <br>
+                <p class="query">勤務場所:</p>
+                <p>${place}</p>
                 <br>
                 <p class="query">業務時間:</p>
                 <p>${start} - ${end} 　(${hours}時間${minutes}分)</p>
@@ -293,8 +310,6 @@ app.post('/generate-pdf', upload.array("photos", 5), async (req, res) => {
 
 
     
-
-
         // Send the email
         transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
