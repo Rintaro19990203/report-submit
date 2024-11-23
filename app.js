@@ -59,6 +59,7 @@ app.get("/", (req, res) => {
                   <option value="関谷周司" ${formData && formData.name === '関谷周司' ? 'selected' : ''}>関谷周司</option>
                   <option value="関谷峰子" ${formData && formData.name === '関谷峰子' ? 'selected' : ''}>関谷峰子</option>
                   <option value="上野良一" ${formData && formData.name === '上野良一' ? 'selected' : ''}>上野良一</option>
+                  <option value="久保田容子" ${formData && formData.name === '久保田容子' ? 'selected' : ''}>久保田容子</option>
                 </select>
               </div>
 
